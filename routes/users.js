@@ -36,6 +36,12 @@ router.get("/:email",(req,res)=>{
     res.send(filtered_users);
 });
 
+router.get("/lastName/:lastName", (req, res) => {
+    const lastName = req.params.lastName;
+    let filtered_lastName = users.filter((user) => user.lastName ===lastName);
+    res.send(filtered_lastName);
+
+});
 
 // POST request: Create a new user
 router.post("/",(req,res)=>{
@@ -48,6 +54,20 @@ router.post("/",(req,res)=>{
   })
   res.send("The user " + req.query.firstName + " has been added!")//This line is to be replaced with actual return value
 });
+
+function getDateFromString (strDate){
+    let [dd, mm, yyyy] = strDate.split('-');
+    return new Date(yyyy + "/" + mm +"/" + dd);
+}
+
+router.get("/sort",(req, res) => {
+    let sorted_users = users.sort(function(a,b) {
+        let d1 = getDateFromString(a.DOB);
+        let d2 = getDateFromString(b.DOB);
+        return d1 - d2;
+    });
+    res.send(sorted_users);
+})
 
 
 // PUT request: Update the details of a user by email ID
